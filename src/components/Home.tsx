@@ -23,11 +23,15 @@ const Home = () => {
   const receiptRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
-    content: () => receiptRef.current,
     documentTitle: 'Struk Pembayaran',
     removeAfterPrint: true,
-    copyStyles: true,
     pageStyle: '@page { size: 80mm 297mm }',
+    onBeforeGetContent: () => {
+      return new Promise((resolve) => {
+        resolve();
+      });
+    },
+    content: () => receiptRef.current,
   });
 
   const getProducts = (): Product[] => {
@@ -375,7 +379,7 @@ const Home = () => {
             <Receipt ref={receiptRef} transaction={currentTransaction} />
             <div className="mt-4 flex justify-center gap-4">
               <button
-                onClick={handlePrint}
+                onClick={() => handlePrint()}
                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"
               >
                 <Printer size={20} />
